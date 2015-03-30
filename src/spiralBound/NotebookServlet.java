@@ -3,6 +3,7 @@ package spiralBound;
 import java.io.IOException;
 
 import javax.ejb.EJB;
+import javax.ejb.Remote;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
