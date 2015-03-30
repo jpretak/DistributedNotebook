@@ -3,6 +3,8 @@ package spiralBound;
 import java.io.IOException;
 
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 public class NotebookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
-	@EJB NotebookDao notebookDao;
+	@EJB 
+	NotebookDao notebookDao;
+	
+	@EJB
+	public dino.api.Directory myDirectory;
+	
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -29,6 +36,21 @@ public class NotebookServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		InitialContext context = null;
+		try {
+			context = new InitialContext();
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			myDirectory = (dino.api.Directory) context.lookup("java:global/DiNo/bean/ApplicationNotebookListBean/Directory");
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
 		String thepath = "/"+request.getPathInfo();
 		String[] pathelements = thepath.split("/");
 		//if(pathelements[1]=="notebook"){
@@ -37,7 +59,7 @@ public class NotebookServlet extends HttpServlet {
 			request.setAttribute("notebooks", notebookDao.getAllNotebooks());
 			request.getRequestDispatcher("/notebook.jsp").forward(request, response);
 		}else{
-			request.setAttribute("notebooks", notebookDao.getNotebookByID(pathelements[2]));
+			request.setAttribute("notebooks", notebookDao.getNotebook(pathelements[2]));
 			request.getRequestDispatcher("/notebook2.jsp").forward(request, response);
 		}
 	//	}
@@ -96,14 +118,8 @@ public class NotebookServlet extends HttpServlet {
 	  		String id = pathelements[1];
 	  	 
 	        if (id != null){
-	        	final int myresult;
-	        	myresult = notebookDao.deleteNotebook(id);
-	        	if(myresult > 0 )
-	        	{
-	        		//really I want to do nothing and just result in an OK response
-	        	}else{
-	        		response.sendError(HttpServletResponse.SC_NOT_FOUND);
-	        	}
+	        	notebookDao.deleteNotebook(id);
+	        
 	        }
 	  	  }
 	    }

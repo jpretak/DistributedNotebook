@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.Stateful;
-import javax.ejb.Stateless;
+import javax.ejb.Remote;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@ManagedBean
+@Remote
+@ApplicationScoped
 public class Backpack implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -24,6 +28,7 @@ public class Backpack implements Serializable{
 	{
 		id = "1";
 		notebooks = new ArrayList<Notebook>();
+		
 	}
 	public List<Notebook> getNotebooks(){
 		return notebooks;
@@ -53,4 +58,6 @@ public class Backpack implements Serializable{
 	{
 		jndiPort = port;
 	}
+	
+	
 }

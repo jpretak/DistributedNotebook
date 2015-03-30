@@ -1,13 +1,14 @@
 package spiralBound;
 
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.Query;
 
- 
+
 @Stateless
 public class NotebookDao {
 	 public List<Notebook> std;
@@ -27,19 +28,21 @@ public class NotebookDao {
     }
     
  
-    public int deleteNotebook(String id){
+    public void deleteNotebook(String id){
     	Query query = em.createQuery(
     			"DELETE from Notebook g where g.id = :notebookID")
     			.setParameter("notebookID",id);
-    			int result = query.executeUpdate();
-    			return result;
+    			query.executeUpdate();
+    			
     }
     
-    public List<Notebook> getNotebookByID(String id){
+    public Notebook getNotebook(String id){
+    	List<Notebook> notebook;
     	TypedQuery<Notebook> query = em.createQuery(
     			"SELECT g from Notebook g where g.id = :notebookID", Notebook.class)
     			.setParameter("notebookID",id);
-    	return query.getResultList();
+    	notebook = query.getResultList();
+    	return notebook.get(0);
     	
     }
     

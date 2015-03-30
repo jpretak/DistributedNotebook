@@ -2,8 +2,6 @@ package spiralBound;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
-
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet(name = "NoteServlet", urlPatterns={"/notes/*"})
+@WebServlet(name = "NoteServlet", urlPatterns={"/note/*"})
 public class NoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
@@ -39,11 +37,11 @@ public class NoteServlet extends HttpServlet {
 			request.setAttribute("notebooks", notebookDao.getAllNotebooks());
 			request.getRequestDispatcher("/notebook.jsp").forward(request, response);
 		}else if(pathelements.length==3){
-			request.setAttribute("notebooks", notebookDao.getNotebookByID(pathelements[2]));
+			request.setAttribute("notebooks", notebookDao.getNotebook(pathelements[2]));
 			request.getRequestDispatcher("/notebook2.jsp").forward(request, response);
 		}else{
-			List<Notebook> NB = notebookDao.getNotebookByID(pathelements[2]);
-			Note thisnote = NB.get(0).getNoteById(pathelements[3]);
+			Notebook NB = notebookDao.getNotebook(pathelements[2]);
+			Note thisnote = NB.getNoteById(pathelements[3]);
 			
 			request.setAttribute("notes", thisnote);
 			request.getRequestDispatcher("/note.jsp").forward(request, response);
@@ -62,8 +60,7 @@ public class NoteServlet extends HttpServlet {
 	         String nid = pathelements[3];
 	         System.out.println("ID is: " +id);
 	         System.out.println("nid is: " + nid);
-	         //if(grade.matches("^[ABCDabcd][+-]?|[EFWIefwi]$"))
-	         //{
+
 	         StringBuilder buffer = new StringBuilder();
 	         BufferedReader reader = request.getReader();
 	         String line;
@@ -72,8 +69,8 @@ public class NoteServlet extends HttpServlet {
 	         }
 	         String data = buffer.toString();
 	         
-	         List<Notebook> N = notebookDao.getNotebookByID(id);
-	         Notebook notebook = N.get(0);
+	         Notebook notebook = notebookDao.getNotebook(id);
+	        
 	         System.out.println(notebook.toString());
 	         notebook.addNote(nid, data);
 	         if (id != null){
@@ -117,14 +114,8 @@ public class NoteServlet extends HttpServlet {
 	  		String id = pathelements[1];
 	  	 
 	        if (id != null){
-	        	final int myresult;
-	        	myresult = notebookDao.deleteNotebook(id);
-	        	if(myresult > 0 )
-	        	{
-	        		//really I want to do nothing and just result in an OK response
-	        	}else{
-	        		response.sendError(HttpServletResponse.SC_NOT_FOUND);
-	        	}
+	        	notebookDao.deleteNotebook(id);
+	        
 	        }
 	  	  }
 	    }

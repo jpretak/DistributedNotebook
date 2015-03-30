@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/xml;charset=utf-8"%>
-<%@page import="java.util.*,spiralBound.Notebook,spiralBound.Note"%>
+<%@page import="java.util.*,spiralBound.NotebookA,spiralBound.Note"%>
 <xml>
 	<%
 		@SuppressWarnings("unchecked") 
-	            Notebook notebook = (Notebook)request.getAttribute("notebooks");
-	            if (notebook != null) {
-	               
+	            List<NotebookA> notebooks = (List<NotebookA>)request.getAttribute("notebooks");
+	            if (notebooks != null) {
+	                for (NotebookA notebook : notebooks) {
 	%>
                     <notebook> 
                     	<id><%= notebook.getID() %></id>
@@ -22,6 +22,6 @@
                     	//}%>
                     </notebook> <%
                 }
-            
+            }
                 %> 
 </xml>

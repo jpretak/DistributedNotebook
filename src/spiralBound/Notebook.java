@@ -21,6 +21,12 @@ import javax.persistence.Id;
 	 
 	    // Constructors:
 	    public Notebook(String title) {
+	    	
+	    	//first we need to get an id and check to ensure that the title is unique
+	    	
+	    	//todo: connect with the Directory Service
+	    	//todo:  call the method createNotebook(title,this.servercode);
+	    	
 	        this.title = title;
 	        notes = new ArrayList<Note>();
 	    }
